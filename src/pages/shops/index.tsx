@@ -8,7 +8,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 
 import { Button } from '@/components/custom/button';
-import { apps } from './data';
+
 import * as apis from '@/apis';
 import { ICreateShopRequest, IUserShopResponse, ShopType } from '@/models/shop';
 import { IoRestaurantOutline } from 'react-icons/io5';
@@ -195,20 +195,20 @@ export default function Apps() {
     shopForm.reset();
   };
 
-  const filteredApps = apps
-    .sort((a, b) =>
-      sort === 'ascending'
-        ? a.name.localeCompare(b.name)
-        : b.name.localeCompare(a.name),
-    )
-    .filter((app) =>
-      appType === 'connected'
-        ? app.connected
-        : appType === 'notConnected'
-          ? !app.connected
-          : true,
-    )
-    .filter((app) => app.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  // const filteredApps = apps
+  //   .sort((a, b) =>
+  //     sort === 'ascending'
+  //       ? a.name.localeCompare(b.name)
+  //       : b.name.localeCompare(a.name),
+  //   )
+  //   .filter((app) =>
+  //     appType === 'connected'
+  //       ? app.connected
+  //       : appType === 'notConnected'
+  //         ? !app.connected
+  //         : true,
+  //   )
+  //   .filter((app) => app.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const handleManageClick = (shopId: string, shopType: string) => {
     navigate(`/shop/${shopId}/${shopType.toLowerCase()}`);

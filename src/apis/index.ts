@@ -1,5 +1,5 @@
 import { ILoginRequest, ILoginResponse, Role } from '@/models/auth';
-import { ICreateCustomer, ICustomer } from '@/models/customer';
+// import { ICreateCustomer, ICustomer } from '@/models/customer';
 import { ILicenseResponse } from '@/models/license';
 import {
   ICreateMenuCategoryRequest,
@@ -11,32 +11,16 @@ import {
   IUpdateMenuCategoryRequest,
   IUpdateMenuItem,
 } from '@/models/menu';
-import {
-  IOrderCreateRequest,
-  IOrderItemsCreateRequest,
-  IOrderItemUpdateRequest,
-  IOrderResponse,
-  IOrderUpdateRequest,
-} from '@/models/order';
+import { IOrderResponse } from '@/models/order';
 import {
   ICreateShopRequest,
   IShopResponse,
   IUserShopResponse,
   ShopType,
 } from '@/models/shop';
-import {
-  IPrintBillPayload,
-  IPrintTicketRequest,
-  IPrinter,
-} from '@/models/printer';
 
 import axios from 'axios';
-import {
-  IBillResponse,
-  ICreateBillRequest,
-  ICreatePaymentRequest,
-  ICreatePaymentResponse,
-} from '@/models/billing';
+import { IBillResponse } from '@/models/billing';
 
 import {
   IChangeUserRoles,

@@ -49,7 +49,9 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
            *
            * @param {E164Number | undefined} value - The entered value
            */
-          onChange={(value) => onChange?.(value || '')}
+          onChange={(value) => {
+            value && onChange?.(value);
+          }}
           {...props}
         />
       );
@@ -112,10 +114,7 @@ const CountrySelect = ({
         <Command>
           <CommandList>
             <ScrollArea className="h-72">
-              <CommandInput
-                wrapperClass="sticky top-0 bg-white dark:bg-black z-[9999999]"
-                placeholder="Search country..."
-              />
+              <CommandInput placeholder="Search country..." />
               <CommandEmpty>No country found.</CommandEmpty>
               <CommandGroup>
                 {options

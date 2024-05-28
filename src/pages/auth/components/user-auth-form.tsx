@@ -19,7 +19,6 @@ import { cn } from '@/lib/utils';
 import { ILoginRequest } from '@/models/auth';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { getUserInfo, login } from '@/redux/features/authSlice';
-import { getShopDetails } from '@/redux/features/shopSlice';
 import { RequestStatus } from '@/utils/enums';
 
 interface UserAuthFormProps extends HTMLAttributes<HTMLDivElement> {}
@@ -40,7 +39,7 @@ const formSchema = z.object({
 });
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const authState = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -54,11 +53,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-  const fetchShopInfo = useCallback(
-    async (shopId: string) => dispatch(getShopDetails(shopId)).unwrap(),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  // const fetchShopInfo = useCallback(
+  //   async (shopId: string) => dispatch(getShopDetails(shopId)).unwrap(),
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   [],
+  // );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

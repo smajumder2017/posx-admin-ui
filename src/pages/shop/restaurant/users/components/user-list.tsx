@@ -8,7 +8,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { prettyDateTime } from '@/utils/date';
-import { Link } from 'react-router-dom';
+
 import { IUserInfoResponse } from '../../../../../models/auth';
 import { Button } from '@/components/custom/button';
 import { MdModeEditOutline } from 'react-icons/md';

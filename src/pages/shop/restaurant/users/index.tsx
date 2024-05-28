@@ -20,7 +20,6 @@ import { useForm } from 'react-hook-form';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -38,7 +37,6 @@ import { Input } from '@/components/ui/input';
 import { PhoneInput } from '@/components/ui/phone-input';
 import { ICreateUser } from '@/models/user';
 import UserDetails from './components/user-details';
-import { create } from 'domain';
 
 const userSchema = z
   .object({
