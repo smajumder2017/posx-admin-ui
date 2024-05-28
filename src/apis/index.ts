@@ -28,7 +28,7 @@ import {
   IShopUserResponse,
 } from '@/models/user';
 
-const serverUrl = process.env.VITE_SERVER_URL;
+const serverUrl = process.env.SERVER_URL;
 
 // Add a request interceptor
 axios.interceptors.request.use(
