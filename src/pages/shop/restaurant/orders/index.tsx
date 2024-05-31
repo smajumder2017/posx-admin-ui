@@ -84,8 +84,10 @@ export default function Orders() {
           All Orders
         </h1>
       </div>
-      <div className="flex gap-4">
-        <div className="flex flex-col flex-1 gap-4">
+      <div className="grid grid-cols-12 gap-4">
+        <div
+          className={`${selectedOrder ? 'col-span-9' : 'col-span-full'} flex flex-col gap-4`}
+        >
           <Card>
             <CardHeader className="px-7">
               <CardTitle>Orders</CardTitle>
@@ -115,7 +117,7 @@ export default function Orders() {
         </div>
 
         {selectedOrder && (
-          <div>
+          <div className={selectedOrder ? 'col-span-3' : ''}>
             <OrderDetails
               orderId={selectedOrder}
               onClose={() => setSelectedOrder('')}

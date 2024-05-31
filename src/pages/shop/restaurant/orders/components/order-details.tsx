@@ -323,11 +323,11 @@ const OrderDetails: React.FC<IOrderDetailsProps> = ({ orderId, onClose }) => {
           {billDetails?.payments?.length ? (
             <Separator className="my-4" />
           ) : null}
-          {billDetails?.payments?.map((payment) => {
-            return (
-              <div className="grid gap-3" key={payment.id}>
-                <div className="font-semibold">Payment Information</div>
-                <dl className="grid gap-3 text-xs 2xl:text-sm">
+          <div className="grid gap-3">
+            <div className="font-semibold">Payment Information</div>
+            {billDetails?.payments?.map((payment) => {
+              return (
+                <dl className="grid gap-3 text-xs 2xl:text-sm" key={payment.id}>
                   <div className="flex items-center justify-between">
                     <dt className="flex items-center gap-1 text-muted-foreground">
                       {/* <CreditCard className="h-4 w-4" /> */}
@@ -336,9 +336,9 @@ const OrderDetails: React.FC<IOrderDetailsProps> = ({ orderId, onClose }) => {
                     <dd>{formatPrice(payment.amountRecieved)}</dd>
                   </div>
                 </dl>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </CardContent>
         <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
           <div className="text-xs text-muted-foreground">

@@ -1,4 +1,4 @@
-import { Button } from '@/components/custom/button';
+// import { Button } from '@/components/custom/button';
 import {
   Card,
   CardContent,
@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { LayoutBody } from '@/components/custom/layout';
 import { RecentSales } from './components/recent-sales';
 import { Overview } from './components/overview';
+// import { formatPrice } from '@/utils/currency';
 
 export default function Dashboard() {
   return (
@@ -18,9 +19,9 @@ export default function Dashboard() {
         <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
           Dashboard
         </h1>
-        <div className="flex items-center space-x-2">
+        {/* <div className="flex items-center space-x-2">
           <Button>Download</Button>
-        </div>
+        </div> */}
       </div>
       <Tabs
         orientation="vertical"
@@ -30,9 +31,9 @@ export default function Dashboard() {
         <div className="w-full overflow-x-scroll pb-2">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            {/* <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="reports">Reports</TabsTrigger>
-            <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            <TabsTrigger value="notifications">Notifications</TabsTrigger> */}
           </TabsList>
         </div>
         <TabsContent value="overview" className="space-y-4">
@@ -40,7 +41,7 @@ export default function Dashboard() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Total Revenue
+                  Total Sales
                 </CardTitle>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -56,10 +57,12 @@ export default function Dashboard() {
                 </svg>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">$45,231.89</div>
-                <p className="text-xs text-muted-foreground">
+                <div className="text-2xl font-bold">
+                  {/* {formatPrice(salesByDate[0].total)} */}
+                </div>
+                {/* <p className="text-xs text-muted-foreground">
                   +20.1% from last month
-                </p>
+                </p> */}
               </CardContent>
             </Card>
             <Card>

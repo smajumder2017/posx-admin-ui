@@ -48,6 +48,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { isMobilePhone } from 'validator';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const appText = new Map<string, string>([
   ['all', 'All Shops'],
@@ -315,236 +316,227 @@ export default function Apps() {
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
-                <FormField
-                  control={shopForm.control}
-                  name="shopName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Shop Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter shop name" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        This will be public shop display name.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={shopForm.control}
-                  name="shopTypeId"
-                  render={({ field }) => (
-                    <FormItem className="col-span-1">
-                      <FormLabel>Shop Type</FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a shop type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>Shop Types</SelectLabel>
-                              {shopTypes.map((type) => {
-                                return (
-                                  <SelectItem
-                                    value={type.id.toString()}
-                                    key={type.id}
-                                  >
-                                    {type.value}
+                <ScrollArea className="h-[70svh]">
+                  <FormField
+                    control={shopForm.control}
+                    name="shopName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Shop Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter shop name" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          This will be public shop display name.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={shopForm.control}
+                    name="shopTypeId"
+                    render={({ field }) => (
+                      <FormItem className="col-span-1">
+                        <FormLabel>Shop Type</FormLabel>
+                        <FormControl>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select a shop type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                <SelectLabel>Shop Types</SelectLabel>
+                                {shopTypes.map((type) => {
+                                  return (
+                                    <SelectItem
+                                      value={type.id.toString()}
+                                      key={type.id}
+                                    >
+                                      {type.value}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormDescription>
+                          Select shop type, this will help you to manage the
+                          things better
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={shopForm.control}
+                    name="contactNo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Contact Number</FormLabel>
+                        <FormControl>
+                          <PhoneInput
+                            // countrySelectProps={{ disabled: false }}
+                            // onCountryChange={setCountry}
+                            // className="col-span-4"
+                            // value={phoneNumber}
+                            // onChange={setPhoneNumber}
+                            placeholder="Enter a phone number"
+                            defaultCountry="IN"
+                            // onKeyUp={handleSubmit}
+                            // disabled={loading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={shopForm.control}
+                    name="address"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Address</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Enter shop address"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Shop address will be printed on your bills
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={shopForm.control}
+                      name="state"
+                      render={({ field }) => (
+                        <FormItem className="col-span-1">
+                          <FormLabel>State</FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Choose State" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup>
+                                  <SelectLabel>States</SelectLabel>
+                                  <SelectItem value={'West Bengal'}>
+                                    West Bengal
                                   </SelectItem>
-                                );
-                              })}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormDescription>
-                        Select shop type, this will help you to manage the
-                        things better
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={shopForm.control}
-                  name="contactNo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Contact Number</FormLabel>
-                      <FormControl>
-                        <PhoneInput
-                          // countrySelectProps={{ disabled: false }}
-                          // onCountryChange={setCountry}
-                          // className="col-span-4"
-                          // value={phoneNumber}
-                          // onChange={setPhoneNumber}
-                          placeholder="Enter a phone number"
-                          defaultCountry="IN"
-                          // onKeyUp={handleSubmit}
-                          // disabled={loading}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={shopForm.control}
-                  name="address"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Enter shop address" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Shop address will be printed on your bills
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="grid grid-cols-2 gap-4">
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormDescription>
+                            Select your shop state
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={shopForm.control}
+                      name="city"
+                      render={({ field }) => (
+                        <FormItem className="col-span-1">
+                          <FormLabel>City</FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Choose City" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup>
+                                  <SelectLabel>Cities</SelectLabel>
+                                  <SelectItem value={'Kolkata'}>
+                                    Kolkata
+                                  </SelectItem>
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormDescription>
+                            Select your shop city
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <FormField
                     control={shopForm.control}
-                    name="state"
+                    name="pincode"
                     render={({ field }) => (
-                      <FormItem className="col-span-1">
-                        <FormLabel>State</FormLabel>
+                      <FormItem>
+                        <FormLabel>Pincode</FormLabel>
                         <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Choose State" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                <SelectLabel>States</SelectLabel>
-                                <SelectItem value={'West Bengal'}>
-                                  West Bengal
-                                </SelectItem>
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
+                          <Input placeholder="Enter pincode" {...field} />
                         </FormControl>
                         <FormDescription>
-                          Select your shop state
+                          Enter your shop pincode
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={shopForm.control}
+                      name="latitude"
+                      render={({ field }) => (
+                        <FormItem className="col-span-1">
+                          <FormLabel>Latitude</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter latitude" {...field} />
+                          </FormControl>
+                          <FormDescription>
+                            Help us to locate your shop
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={shopForm.control}
+                      name="longitude"
+                      render={({ field }) => (
+                        <FormItem className="col-span-1">
+                          <FormLabel>Longitude</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter longitude" {...field} />
+                          </FormControl>
+                          <FormDescription>
+                            Help us to locate your shop
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <FormField
                     control={shopForm.control}
-                    name="city"
+                    name="gstinNo"
                     render={({ field }) => (
-                      <FormItem className="col-span-1">
-                        <FormLabel>City</FormLabel>
+                      <FormItem>
+                        <FormLabel>GSTIN Number</FormLabel>
                         <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Choose City" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                <SelectLabel>Cities</SelectLabel>
-                                <SelectItem value={'Kolkata'}>
-                                  Kolkata
-                                </SelectItem>
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormDescription>Select your shop city</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <FormField
-                  control={shopForm.control}
-                  name="pincode"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Pincode</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter pincode" {...field} />
-                      </FormControl>
-                      <FormDescription>Enter your shop pincode</FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={shopForm.control}
-                    name="latitude"
-                    render={({ field }) => (
-                      <FormItem className="col-span-1">
-                        <FormLabel>Latitude</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter latitude" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          Help us to locate your shop
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={shopForm.control}
-                    name="longitude"
-                    render={({ field }) => (
-                      <FormItem className="col-span-1">
-                        <FormLabel>Longitude</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter longitude" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          Help us to locate your shop
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <FormField
-                  control={shopForm.control}
-                  name="gstinNo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>GSTIN Number</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter gstin number" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        This is required to calculate gst
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={shopForm.control}
-                    name="cgstPercentage"
-                    render={({ field }) => (
-                      <FormItem className="col-span-1">
-                        <FormLabel>CGST Percentage</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter value" {...field} />
+                          <Input placeholder="Enter gstin number" {...field} />
                         </FormControl>
                         <FormDescription>
                           This is required to calculate gst
@@ -553,39 +545,58 @@ export default function Apps() {
                       </FormItem>
                     )}
                   />
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={shopForm.control}
+                      name="cgstPercentage"
+                      render={({ field }) => (
+                        <FormItem className="col-span-1">
+                          <FormLabel>CGST Percentage</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter value" {...field} />
+                          </FormControl>
+                          <FormDescription>
+                            This is required to calculate gst
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={shopForm.control}
+                      name="sgstPercentage"
+                      render={({ field }) => (
+                        <FormItem className="col-span-1">
+                          <FormLabel>SGST Percentage</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter value" {...field} />
+                          </FormControl>
+                          <FormDescription>
+                            This is required to calculate gst
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <FormField
                     control={shopForm.control}
-                    name="sgstPercentage"
+                    name="serviceChargePercentage"
                     render={({ field }) => (
-                      <FormItem className="col-span-1">
-                        <FormLabel>SGST Percentage</FormLabel>
+                      <FormItem>
+                        <FormLabel>Service Charge Percentage</FormLabel>
                         <FormControl>
                           <Input placeholder="Enter value" {...field} />
                         </FormControl>
                         <FormDescription>
-                          This is required to calculate gst
+                          This is required to calculate service charges
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                </div>
-                <FormField
-                  control={shopForm.control}
-                  name="serviceChargePercentage"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Service Charge Percentage</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter value" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        This is required to calculate service charges
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                </ScrollArea>
+
                 <DialogFooter>
                   <Button type="submit">Save changes</Button>
                 </DialogFooter>

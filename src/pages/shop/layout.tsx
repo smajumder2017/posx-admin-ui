@@ -30,7 +30,8 @@ export default function ShopLayout() {
 
   useEffect(() => {
     if (content.current) {
-      content.current.onscroll = function () {
+      content.current.onscroll = () => {
+        console.log(content.current?.scrollTop);
         if (content.current?.scrollTop === 0) {
           setScrolled(false);
         } else {
@@ -40,9 +41,9 @@ export default function ShopLayout() {
     }
 
     return () => {
-      if (content.current) content.current.onscroll = () => {};
+      if (content.current) content.current.onscroll = null;
     };
-  }, [content]);
+  }, [content.current]);
 
   if (shopId && shopState.data?.shopType.value) {
     return (
@@ -64,7 +65,7 @@ export default function ShopLayout() {
             <LayoutHeader
               className={`sticky top-0 justify-between px-4 py-3 ${
                 scrolled ? 'shadow bg-background' : ''
-              } md:px-4`}
+              } md:px-4 backdrop-filter backdrop-blur-md z-[9999] transition-all duration-300`}
             >
               {/* <TopNav links={topNav} /> */}
               <div className="ml-auto flex items-center space-x-4">

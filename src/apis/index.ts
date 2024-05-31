@@ -18,6 +18,7 @@ import {
   IUserShopResponse,
   ShopType,
 } from '@/models/shop';
+import { ISalesResponse } from '@/models/dashboard';
 
 import axios from 'axios';
 import { IBillResponse } from '@/models/billing';
@@ -169,3 +170,6 @@ export const getAllRoles = () =>
 
 export const updateUserRoles = (apiArgs: IChangeUserRoles) =>
   axios.put(`${serverUrl}/user/roles`, apiArgs);
+
+export const getSalesData = (shopId: string) =>
+  axios.get<ISalesResponse>(`${serverUrl}/dashboard/sales/${shopId}`);
