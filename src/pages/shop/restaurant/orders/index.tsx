@@ -43,7 +43,6 @@ export default function Orders() {
           shopId: args.shopId,
           orderStatusId: args.orderStatusId,
           isClosed: args.isClosed,
-          employeeId: args.employeeId,
           skip: args.skip || 0,
           take: args.take || itemsPerPage,
         });
