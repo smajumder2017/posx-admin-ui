@@ -14,6 +14,7 @@ import {
   CardContent,
 } from '@/components/ui/card';
 import { Paginate } from '@/components/custom/paginate';
+import { Loader } from '@/components/custom/loader';
 
 export default function Orders() {
   const { shopId } = useParams<{
@@ -24,7 +25,7 @@ export default function Orders() {
   const [selectedOrder, setSelectedOrder] = useState('');
   const authState = useAppSelector((state) => state.auth);
   const [totalCount, setTotalCount] = useState(0);
-  // const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get('page') || '0');
   const itemsPerPage = 20;
@@ -39,6 +40,7 @@ export default function Orders() {
       take?: number;
     }) => {
       try {
+        setLoading(true);
         const orderRes = await apis.getAllOrder({
           shopId: args.shopId,
           orderStatusId: args.orderStatusId,
@@ -52,6 +54,7 @@ export default function Orders() {
       } catch (error) {
         console.log(error);
       }
+      setLoading(false);
     },
     [],
   );
@@ -95,7 +98,7 @@ export default function Orders() {
                 store.
               </CardDescription>
             </CardHeader>
-
+            {loading && <Loader />}
             <CardContent>
               <OrderList
                 orders={orders}
