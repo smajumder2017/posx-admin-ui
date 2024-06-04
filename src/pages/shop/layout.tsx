@@ -4,7 +4,6 @@ import useIsCollapsed from '@/hooks/use-is-collapsed';
 import { Layout, LayoutBody, LayoutHeader } from '@/components/custom/layout';
 import ThemeSwitch from '@/components/theme-switch';
 import { UserNav } from '@/components/user-nav';
-import { Search } from '@/components/search';
 import { sidelinks } from '@/data/sidelinks';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getShopDetails } from '@/redux/features/shopSlice';
