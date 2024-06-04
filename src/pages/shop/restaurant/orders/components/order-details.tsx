@@ -319,7 +319,7 @@ const OrderDetails: React.FC<IOrderDetailsProps> = ({ orderId, onClose }) => {
                       <TableCell className="hidden sm:table-cell">
                         {item.itemName}
                       </TableCell>
-                      <TableCell className="text-center flex items-center justify-center gap-2">
+                      <TableCell className="text-center">
                         {item.quantity}
                       </TableCell>
                       <TableCell className="text-right">{item.price}</TableCell>
