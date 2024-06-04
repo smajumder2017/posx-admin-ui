@@ -51,20 +51,39 @@ axios.interceptors.response.use(
     // Do something with response data
     return response;
   },
-  function (error) {
+  async (error) => {
     // Do something with response error
-    if (error.response.status === 401) {
-      window.location.href = '/sign-in';
+    if (error.response && error.response.status === 401) {
+      // Access token has expired, refresh it
+      if (error.config.url.includes('/auth/refreshToken')) {
+        window.location.href = '/sign-in';
+        return;
+      }
+      try {
+        const newAccessToken = await refreshAccessToken();
+        // Update the request headers with the new access token
+        error.config.headers['Authorization'] =
+          `Bearer ${newAccessToken.data.accessToken}`;
+        localStorage.setItem('accessToken', newAccessToken.data.accessToken);
+        // Retry the original request
+        return axios(error.config);
+      } catch (refreshError) {
+        // Handle token refresh error
+        throw refreshError;
+      }
     }
     return Promise.reject(error);
   },
 );
 
+const refreshAccessToken = () =>
+  axios.post<ILoginResponse>(`${serverUrl}/auth/refreshToken`);
+
 export const login = (apiArgs: ILoginRequest) =>
   axios.post<ILoginResponse>(`${serverUrl}/auth/login`, apiArgs);
 
-// export const logout = () =>
-//   http.post<{}, {}>(`${serverUrl}/auth/logout`, { credentials: 'include' });
+export const logout = () =>
+  axios.post(`${serverUrl}/auth/logout`, { credentials: 'include' });
 
 export const userInfo = () => axios.get(`${serverUrl}/user/info`);
 

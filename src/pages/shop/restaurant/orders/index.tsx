@@ -100,11 +100,13 @@ export default function Orders() {
             </CardHeader>
             {loading && <Loader />}
             <CardContent>
-              <OrderList
-                orders={orders}
-                onOrderSelect={setSelectedOrder}
-                selectedOrder={selectedOrder}
-              />
+              {orders.length ? (
+                <OrderList
+                  orders={orders}
+                  onOrderSelect={setSelectedOrder}
+                  selectedOrder={selectedOrder}
+                />
+              ) : null}
             </CardContent>
           </Card>
           {orders.length ? (

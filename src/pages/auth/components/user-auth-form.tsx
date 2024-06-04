@@ -20,6 +20,9 @@ import { ILoginRequest } from '@/models/auth';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { getUserInfo, login } from '@/redux/features/authSlice';
 import { RequestStatus } from '@/utils/enums';
+import { getErrorMessage } from '@/utils/processApiError';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface UserAuthFormProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -39,10 +42,12 @@ const formSchema = z.object({
 });
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading] = useState(false);
   const authState = useAppSelector((state) => state.auth);
+  const [error, setError] = useState<{ title: string; message: string }>();
+  const [loader, setLoader] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const handleLogin = useCallback(
     async (payload: ILoginRequest) => dispatch(login(payload)).unwrap(),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,6 +78,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   const onLogin = async (email: string, password: string) => {
     try {
+      setLoader(true);
       const payload = {
         email,
         password,
@@ -80,12 +86,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       const response = await handleLogin(payload);
       localStorage.setItem('accessToken', response.data.accessToken);
       const userInfo = await fetchuserInfo();
-
+      setLoader(false);
       console.log(userInfo);
 
       navigate(`/`);
     } catch (error) {
-      console.log(error);
+      setLoader(false);
+      setError({ title: 'Failed to login', message: getErrorMessage(error) });
     }
   };
   if (authState.asyncStatus === RequestStatus.Success) {
@@ -136,7 +143,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 </FormItem>
               )}
             />
-            <Button className="mt-2" loading={isLoading}>
+            {error && (
+              <Alert variant="destructive">
+                <ExclamationTriangleIcon className="h-4 w-4" />
+                <AlertTitle>{error.title}</AlertTitle>
+                <AlertDescription>{error.message}</AlertDescription>
+              </Alert>
+            )}
+            <Button className="mt-2" loading={loader} disabled={loader}>
               Login
             </Button>
 

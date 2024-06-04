@@ -37,6 +37,10 @@ import { Input } from '@/components/ui/input';
 import { PhoneInput } from '@/components/ui/phone-input';
 import { ICreateUser } from '@/models/user';
 import UserDetails from './components/user-details';
+import { Loader } from '@/components/custom/loader';
+import { getErrorMessage } from '@/utils/processApiError';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
 const userSchema = z
   .object({
@@ -69,6 +73,11 @@ export default function Users() {
   const authState = useAppSelector((state) => state.auth);
   const [totalCount, setTotalCount] = useState(0);
   const [userDialog, setUserDialog] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<{ title: string; message: string } | null>(
+    null,
+  );
   const userForm = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -92,6 +101,7 @@ export default function Users() {
       skip?: number;
       take?: number;
     }) => {
+      setLoader(true);
       try {
         const userRes = await apis.getShopUsers({
           shopId: args.shopId,
@@ -107,17 +117,20 @@ export default function Users() {
       } catch (error) {
         console.log(error);
       }
+      setLoader(false);
     },
     [],
   );
 
   const fetchAllRoles = useCallback(async () => {
+    setLoader(true);
     try {
       const roleRes = await apis.getAllRoles();
       setAllRoles(roleRes.data.roles);
     } catch (error) {
       console.log(error);
     }
+    setLoader(false);
   }, []);
 
   useEffect(() => {
@@ -139,6 +152,7 @@ export default function Users() {
   };
 
   const handleUserCreate = async (payload: ICreateUser) => {
+    setSaving(true);
     try {
       await apis.createUser(payload);
       userForm.reset();
@@ -152,7 +166,9 @@ export default function Users() {
         });
     } catch (error) {
       console.log(error);
+      setError({ title: 'Failed to create', message: getErrorMessage(error) });
     }
+    setSaving(false);
   };
 
   // const handleCategoryUpdate = async (payload: IUpdateMenuItem) => {
@@ -279,13 +295,15 @@ export default function Users() {
                   (Showing {users.length}/{totalCount}) users from your store.
                 </CardDescription>
               </CardHeader>
-
+              {loader && <Loader />}
               <CardContent>
-                <UserList
-                  users={users}
-                  onUserSelect={setSelectedUser}
-                  selectedUser={selectedUser}
-                />
+                {users.length ? (
+                  <UserList
+                    users={users}
+                    onUserSelect={setSelectedUser}
+                    selectedUser={selectedUser}
+                  />
+                ) : null}
               </CardContent>
             </Card>
             {users.length ? (
@@ -459,8 +477,17 @@ export default function Users() {
                     )}
                   />
                 </div>
+                {error && (
+                  <Alert variant="destructive">
+                    <ExclamationTriangleIcon className="h-4 w-4" />
+                    <AlertTitle>{error.title}</AlertTitle>
+                    <AlertDescription>{error.message}</AlertDescription>
+                  </Alert>
+                )}
                 <DialogFooter>
-                  <Button type="submit">Save changes</Button>
+                  <Button type="submit" loading={saving} disabled={saving}>
+                    Save changes
+                  </Button>
                 </DialogFooter>
               </div>
             </form>

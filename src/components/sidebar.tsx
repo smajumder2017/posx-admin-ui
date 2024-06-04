@@ -5,6 +5,7 @@ import { Button } from './custom/button';
 import Nav from './nav';
 import { cn } from '@/lib/utils';
 import { SideLink } from '@/data/sidelinks';
+import { Link } from 'react-router-dom';
 
 interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   isCollapsed: boolean;
@@ -74,12 +75,16 @@ export default function AppSidebar({
                 strokeLinejoin="round"
                 strokeWidth="16"
               ></line>
-              <span className="sr-only">PosX Admin</span>
+              <Link to="/">
+                <span className="sr-only">PosX Admin</span>
+              </Link>
             </svg>
             <div
               className={`flex flex-col justify-end truncate ${isCollapsed ? 'invisible w-0' : 'visible w-auto'}`}
             >
-              <span className="font-medium">PosX Admin</span>
+              <Link to="/">
+                <span className="font-medium">PosX Admin</span>
+              </Link>
               <span className="text-xs"></span>
             </div>
           </div>

@@ -74,6 +74,12 @@ const MenuItemList: React.FC<IMenuItemListProps> = ({ data, onEditClick }) => {
               : item.foodType === Food_Type.NonVegetarian
                 ? 'text-red-500'
                 : 'text-blue-500';
+          const foodType =
+            item.foodType === Food_Type.Vegetarian
+              ? 'Veg'
+              : item.foodType === Food_Type.NonVegetarian
+                ? 'Non-Veg'
+                : 'Vegan';
           return (
             <TableRow key={item.id} className={`text-xs 2xl:text-sm`}>
               <TableCell className="hidden sm:table-cell">
@@ -93,7 +99,7 @@ const MenuItemList: React.FC<IMenuItemListProps> = ({ data, onEditClick }) => {
               <TableCell className="hidden sm:table-cell">
                 <Badge variant="outline" className="gap-1">
                   <BiFoodTag className={foodTypeColorClass} />
-                  {item.foodType}
+                  {foodType}
                 </Badge>
               </TableCell>
               <TableCell className="hidden sm:table-cell">

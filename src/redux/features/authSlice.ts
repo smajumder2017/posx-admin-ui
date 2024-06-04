@@ -31,19 +31,20 @@ export const login = createAsyncThunk(
       const response = await api.login(payload);
       return response;
     } catch (error) {
-      return thunkApi.rejectWithValue(error);
+      const err = getApiError(error);
+      return thunkApi.rejectWithValue(err);
     }
   },
 );
 
-// export const logout = createAsyncThunk("auth/logout", async (_, thunkApi) => {
-//   try {
-//     const response = await api.logout();
-//     return response;
-//   } catch (error) {
-//     return thunkApi.rejectWithValue(error);
-//   }
-// });
+export const logout = createAsyncThunk('auth/logout', async (_, thunkApi) => {
+  try {
+    const response = await api.logout();
+    return response;
+  } catch (error) {
+    return thunkApi.rejectWithValue(error);
+  }
+});
 
 export const getUserInfo = createAsyncThunk(
   'auth/getUserInfo',

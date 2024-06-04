@@ -4,7 +4,7 @@ import useIsCollapsed from '@/hooks/use-is-collapsed';
 import { Layout, LayoutHeader, LayoutBody } from './custom/layout';
 import ThemeSwitch from './theme-switch';
 import { UserNav } from './user-nav';
-import { Search } from './search';
+// import { Search } from './search';
 import { appSidelinks } from '@/data/appsidelinks';
 
 export default function AppShell() {
@@ -25,7 +25,7 @@ export default function AppShell() {
           <LayoutHeader className="sticky top-0 justify-between px-4 py-3 shadow md:px-4">
             {/* <TopNav links={topNav} /> */}
             <div className="ml-auto flex items-center space-x-4">
-              <Search />
+              {/* <Search /> */}
               <ThemeSwitch />
               <UserNav />
             </div>

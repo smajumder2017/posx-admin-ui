@@ -40,6 +40,10 @@ import {
 } from '@/models/menu';
 import * as apis from '@/apis';
 import { useParams } from 'react-router-dom';
+import { getErrorMessage } from '@/utils/processApiError';
+import { Loader } from '@/components/custom/loader';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
 const categorySchema = z.object({
   categoryName: z.string().min(2).max(50),
@@ -50,6 +54,11 @@ const MenuCategory = () => {
   const [tab, setTab] = useState('categories');
   const { shopId } = useParams<{ shopId: string }>();
   const [categoryDialog, setCategoryDialog] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<{ title: string; message: string } | null>(
+    null,
+  );
   const categoryForm = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),
     defaultValues: {
@@ -61,6 +70,7 @@ const MenuCategory = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const fetchMenuCategories = useCallback(async (shopId: string) => {
     try {
+      setLoader(true);
       const categoryRes = await apis.getMenuCategories({
         shopId,
         skip: 0,
@@ -70,6 +80,7 @@ const MenuCategory = () => {
     } catch (error) {
       console.log(error);
     }
+    setLoader(false);
   }, []);
 
   useEffect(() => {
@@ -86,14 +97,16 @@ const MenuCategory = () => {
   };
 
   const handleCategoryCreate = async (payload: ICreateMenuCategoryRequest) => {
+    setSaving(true);
     try {
       await apis.createCategory(payload);
       categoryForm.reset();
       setCategoryDialog(false);
       fetchMenuCategories(payload.shopId);
     } catch (error) {
-      console.log(error);
+      setError({ title: 'Failed to create', message: getErrorMessage(error) });
     }
+    setSaving(false);
   };
 
   const handleCategoryUpdate = async (payload: IUpdateMenuCategoryRequest) => {
@@ -104,7 +117,7 @@ const MenuCategory = () => {
       setCategoryDialog(false);
       fetchMenuCategories(payload.shopId);
     } catch (error) {
-      console.log(error);
+      setError({ title: 'Failed to update', message: getErrorMessage(error) });
     }
   };
 
@@ -160,8 +173,11 @@ const MenuCategory = () => {
                 View and manage your your menu categories
               </CardDescription>
             </CardHeader>
+            {loader && <Loader />}
             <CardContent>
-              <CategoryList data={categories} onEditClick={handleEditClick} />
+              {categories.length ? (
+                <CategoryList data={categories} onEditClick={handleEditClick} />
+              ) : null}
             </CardContent>
           </Card>
         </TabsContent>
@@ -216,8 +232,18 @@ const MenuCategory = () => {
                     </FormItem>
                   )}
                 />
+                {error && (
+                  <Alert variant="destructive">
+                    <ExclamationTriangleIcon className="h-4 w-4" />
+                    <AlertTitle>{error.title}</AlertTitle>
+                    <AlertDescription>{error.message}</AlertDescription>
+                  </Alert>
+                )}
+
                 <DialogFooter>
-                  <Button type="submit">Save changes</Button>
+                  <Button type="submit" loading={saving} disabled={saving}>
+                    Save changes
+                  </Button>
                 </DialogFooter>
               </div>
             </form>

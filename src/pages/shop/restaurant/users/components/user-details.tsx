@@ -1,27 +1,20 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from '@/components/ui/card';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from '@/components/ui/pagination';
+import { Button } from '@/components/custom/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { IUserInfoResponse, Role } from '@/models/auth';
 import { formatPhoneNumberIntl } from 'react-phone-number-input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useEffect, useState } from 'react';
+import { getErrorMessage } from '@/utils/processApiError';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
 interface IUserDetailsProps {
   data: IUserInfoResponse;
   allRoles: Role[];
-  onUpdateRole: (ids: number[]) => void;
+  onUpdateRole: (ids: number[]) => Promise<void>;
 }
 
 const eqSet = (xs: Set<number>, ys: Set<number>) =>
@@ -33,7 +26,10 @@ const UserDetails: React.FC<IUserDetailsProps> = ({
   onUpdateRole,
 }) => {
   const [selectedRolesId, setSelectedRolesId] = useState<number[]>([]);
-
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<{ title: string; message: string } | null>(
+    null,
+  );
   useEffect(() => {
     if (data.userRoles?.length) {
       setSelectedRolesId(
@@ -56,8 +52,15 @@ const UserDetails: React.FC<IUserDetailsProps> = ({
     }
   };
 
-  const handleUpdaRoleClick = () => {
-    onUpdateRole(selectedRolesId);
+  const handleUpdaRoleClick = async () => {
+    setError(null);
+    setSaving(true);
+    try {
+      await onUpdateRole(selectedRolesId);
+    } catch (error) {
+      setError({ title: 'Failed to update', message: getErrorMessage(error) });
+    }
+    setSaving(false);
   };
 
   const existingRoleSet = new Set(
@@ -150,16 +153,24 @@ const UserDetails: React.FC<IUserDetailsProps> = ({
                 );
               })}
             </div>
+            {error && (
+              <Alert variant="destructive">
+                <ExclamationTriangleIcon className="h-4 w-4" />
+                <AlertTitle>{error.title}</AlertTitle>
+                <AlertDescription>{error.message}</AlertDescription>
+              </Alert>
+            )}
             <Button
               className="w-full"
-              disabled={!roleChanged}
+              loading={saving}
+              disabled={!roleChanged || saving}
               onClick={handleUpdaRoleClick}
             >
               Update Roles
             </Button>
           </TabsContent>
         </CardContent>
-        <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
+        {/* <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
           <div className="text-xs text-muted-foreground">
             Updated <time dateTime="2023-11-23">November 23, 2023</time>
           </div>
@@ -167,19 +178,19 @@ const UserDetails: React.FC<IUserDetailsProps> = ({
             <PaginationContent>
               <PaginationItem>
                 <Button size="icon" variant="outline" className="h-6 w-6">
-                  {/* <ChevronLeft className="h-3.5 w-3.5" /> */}
+                  <ChevronLeft className="h-3.5 w-3.5" />
                   <span className="sr-only">Previous Order</span>
                 </Button>
               </PaginationItem>
               <PaginationItem>
                 <Button size="icon" variant="outline" className="h-6 w-6">
-                  {/* <ChevronRight className="h-3.5 w-3.5" /> */}
+                  <ChevronRight className="h-3.5 w-3.5" />
                   <span className="sr-only">Next Order</span>
                 </Button>
               </PaginationItem>
             </PaginationContent>
           </Pagination>
-        </CardFooter>
+        </CardFooter> */}
       </Tabs>
     </Card>
   );

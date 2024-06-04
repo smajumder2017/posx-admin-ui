@@ -50,6 +50,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Food_Type, Spice_Scale } from '@/utils/enums';
+import { Loader } from '@/components/custom/loader';
+import { getErrorMessage } from '@/utils/processApiError';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
 const menuItemSchema = z.object({
   itemName: z.string().min(2).max(50),
@@ -67,6 +71,12 @@ const Menutems = () => {
   const [categories, setCategories] = useState<IMenuCategory[]>([]);
   const [menuItemDialog, setMenuItemDialog] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState('');
+  const [loader, setLoader] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<{ title: string; message: string } | null>(
+    null,
+  );
+
   const menuItemForm = useForm<z.infer<typeof menuItemSchema>>({
     resolver: zodResolver(menuItemSchema),
     defaultValues: {
@@ -81,6 +91,7 @@ const Menutems = () => {
   });
 
   const fetchMenuItems = useCallback(async (shopId: string) => {
+    setLoader(true);
     try {
       const menuItemRes = await apis.getMenuItems({
         shopId,
@@ -92,8 +103,10 @@ const Menutems = () => {
     } catch (error) {
       console.log(error);
     }
+    setLoader(false);
   }, []);
   const fetchMenuCategories = useCallback(async (shopId: string) => {
+    setLoader(true);
     try {
       const categoryRes = await apis.getMenuCategories({
         shopId,
@@ -104,20 +117,26 @@ const Menutems = () => {
     } catch (error) {
       console.log(error);
     }
+    setLoader(false);
   }, []);
 
   const handleItemCreate = async (payload: ICreateMenuItem) => {
+    setError(null);
+    setSaving(true);
     try {
       await apis.createMenuItem(payload);
       menuItemForm.reset();
       setMenuItemDialog(false);
       fetchMenuItems(payload.shopId);
     } catch (error) {
-      console.log(error);
+      setError({ title: 'Failed to create', message: getErrorMessage(error) });
     }
+    setSaving(false);
   };
 
   const handleCategoryUpdate = async (payload: IUpdateMenuItem) => {
+    setError(null);
+    setSaving(true);
     try {
       await apis.updateMenuITem(payload);
       menuItemForm.reset();
@@ -125,8 +144,9 @@ const Menutems = () => {
       setMenuItemDialog(false);
       fetchMenuItems(payload.shopId);
     } catch (error) {
-      console.log(error);
+      setError({ title: 'Failed to update', message: getErrorMessage(error) });
     }
+    setSaving(false);
   };
 
   function onCategoryFormSubmit(values: z.infer<typeof menuItemSchema>) {
@@ -166,6 +186,7 @@ const Menutems = () => {
   const handleItemDialogClose = (value: boolean) => {
     setMenuItemDialog(value);
     menuItemForm.reset();
+    setSelectedMenuItem('');
   };
 
   useEffect(() => {
@@ -191,8 +212,11 @@ const Menutems = () => {
             View and manage your your menu categories
           </CardDescription>
         </CardHeader>
+        {loader && <Loader />}
         <CardContent>
-          <MenuItemList data={menuItems} onEditClick={handleEditClick} />
+          {menuItems.length ? (
+            <MenuItemList data={menuItems} onEditClick={handleEditClick} />
+          ) : null}
         </CardContent>
       </Card>
       <Dialog open={menuItemDialog} onOpenChange={handleItemDialogClose}>
@@ -396,8 +420,19 @@ const Menutems = () => {
                     </FormItem>
                   )}
                 />
+
+                {error && (
+                  <Alert variant="destructive">
+                    <ExclamationTriangleIcon className="h-4 w-4" />
+                    <AlertTitle>{error.title}</AlertTitle>
+                    <AlertDescription>{error.message}</AlertDescription>
+                  </Alert>
+                )}
+
                 <DialogFooter>
-                  <Button type="submit">Save changes</Button>
+                  <Button type="submit" loading={saving} disabled={saving}>
+                    Save changes
+                  </Button>
                 </DialogFooter>
               </div>
             </form>

@@ -69,7 +69,7 @@ export default function ShopLayout() {
             >
               {/* <TopNav links={topNav} /> */}
               <div className="ml-auto flex items-center space-x-4">
-                <Search />
+                {/* <Search /> */}
                 <ThemeSwitch />
                 <UserNav />
               </div>

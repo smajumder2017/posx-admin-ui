@@ -12,3 +12,7 @@ export function getApiError(error: unknown): {
 
   return { message: 'Something went wrong', statusCode: 500 };
 }
+
+export function getErrorMessage(error: any) {
+  return error.message;
+}
