@@ -77,13 +77,12 @@ axios.interceptors.response.use(
 );
 
 const refreshAccessToken = () =>
-  axios.post<ILoginResponse>(`${serverUrl}/auth/refreshToken`);
+  axios.post<ILoginResponse>(`${serverUrl}/auth/refreshToken`, {}, {});
 
 export const login = (apiArgs: ILoginRequest) =>
   axios.post<ILoginResponse>(`${serverUrl}/auth/login`, apiArgs);
 
-export const logout = () =>
-  axios.post(`${serverUrl}/auth/logout`, { credentials: 'include' });
+export const logout = () => axios.post(`${serverUrl}/auth/logout`, {}, {});
 
 export const userInfo = () => axios.get(`${serverUrl}/user/info`);
 
@@ -192,3 +191,9 @@ export const updateUserRoles = (apiArgs: IChangeUserRoles) =>
 
 export const getSalesData = (shopId: string) =>
   axios.get<ISalesResponse>(`${serverUrl}/dashboard/sales/${shopId}`);
+
+export const getSalesDataByRange = (
+  shopId: string,
+  range: { startDate: string; endDate: string },
+) =>
+  axios.post<ISalesResponse>(`${serverUrl}/dashboard/sales/${shopId}`, range);

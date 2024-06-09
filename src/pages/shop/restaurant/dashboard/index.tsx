@@ -15,15 +15,61 @@ import { useParams } from 'react-router-dom';
 import * as apis from '@/apis';
 import { formatPrice } from '@/utils/currency';
 import { IconCurrencyRupee } from '@tabler/icons-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import moment from 'moment';
+
+const filterText = new Map<string, string>([
+  ['current_week', 'This Week'],
+  ['previous_week', 'Last Week'],
+]);
+
+function createRange(range: 'current_week' | 'previous_week' | string) {
+  switch (range) {
+    case 'current_week': {
+      const curr = new Date(); // get current date
+      const first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+
+      const startDate = new Date(curr.setDate(first)).toUTCString();
+      const endDate = new Date(
+        moment(startDate).add(6, 'd').toString(),
+      ).toUTCString();
+      return { startDate, endDate };
+    }
+    case 'previous_week': {
+      const curr = new Date(); // get current date
+      const first = curr.getDate() - curr.getDay() - 1; // First day is the day of the month - the day of the week
+
+      const endDate = new Date(curr.setDate(first)).toUTCString();
+      const startDate = new Date(
+        moment(endDate).subtract(6, 'd').toString(),
+      ).toUTCString();
+
+      return { startDate, endDate };
+    }
+    default:
+      break;
+  }
+}
 
 export default function Dashboard() {
   const { shopId } = useParams<{ shopId: string }>();
+  const [range, setRange] = useState<'current_week' | 'previous_week' | string>(
+    'current_week',
+  );
   const [salesByDate, setSalesByDate] = useState<ISalesSeriesData[]>([]);
 
-  const getSales = async (shopId: string) => {
+  const getSales = async (
+    shopId: string,
+    range: { startDate: string; endDate: string },
+  ) => {
     try {
-      const response = await apis.getSalesData(shopId);
+      const response = await apis.getSalesDataByRange(shopId, range);
       setSalesByDate(
         Object.keys(response.data.salesByDate).map((key) => ({
           ...response.data.salesByDate[key],
@@ -34,9 +80,19 @@ export default function Dashboard() {
       console.log(error);
     }
   };
+
   useEffect(() => {
-    if (shopId) getSales(shopId);
-  }, [shopId]);
+    const dateRange = createRange(range);
+    if (shopId && dateRange) {
+      getSales(shopId, dateRange);
+    }
+  }, [shopId, range]);
+
+  const handleDateRangeChange = (
+    range: 'current_week' | 'previous_week' | string,
+  ) => {
+    setRange(range);
+  };
 
   const total = salesByDate.reduce((acc, curr) => acc + curr.total, 0);
   const cash = salesByDate.reduce((acc, curr) => acc + curr.cash, 0);
@@ -67,13 +123,26 @@ export default function Dashboard() {
         defaultValue="overview"
         className="space-y-4"
       >
-        <div className="w-full pb-2">
+        <div className="w-full pb-2 flex justify-between">
           <TabsList>
-            <TabsTrigger value="overview">Current Week</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
             {/* <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="reports">Reports</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger> */}
           </TabsList>
+          <Select value={range} onValueChange={handleDateRangeChange}>
+            <SelectTrigger className="w-36 bg-white">
+              <SelectValue>{filterText.get(range)}</SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="current_week">
+                {filterText.get('current_week')}
+              </SelectItem>
+              <SelectItem value="previous_week">
+                {filterText.get('previous_week')}
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

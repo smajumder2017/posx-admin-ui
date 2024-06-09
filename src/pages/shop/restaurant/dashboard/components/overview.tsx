@@ -8,6 +8,8 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  LabelList,
+  CartesianGrid,
 } from 'recharts';
 
 // const data = [
@@ -79,6 +81,7 @@ export const Overview: React.FC<IOverviewProps> = ({ data }) => {
   return (
     <ResponsiveContainer width="100%" height={350}>
       <BarChart data={data}>
+        <CartesianGrid stroke="#f5f5f5" />
         <XAxis
           dataKey="name"
           stroke="#888888"
@@ -104,7 +107,7 @@ export const Overview: React.FC<IOverviewProps> = ({ data }) => {
           // radius={[4, 4, 0, 0]}
           className="fill-gray-200"
           // label={<CustomLabel />}
-        />
+        ></Bar>
         <Bar
           stackId={'1'}
           dataKey="upi"
@@ -112,7 +115,15 @@ export const Overview: React.FC<IOverviewProps> = ({ data }) => {
           radius={[4, 4, 0, 0]}
           className="fill-primary"
           // label={<CustomLabel />}
-        />
+        >
+          <LabelList
+            formatter={(value: number) =>
+              formatPrice(value, { maximumFractionDigits: 0 })
+            }
+            dataKey="total"
+            position="top"
+          />
+        </Bar>
       </BarChart>
     </ResponsiveContainer>
   );
