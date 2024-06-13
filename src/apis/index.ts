@@ -20,7 +20,7 @@ import {
 } from '@/models/shop';
 import { ISalesResponse } from '@/models/dashboard';
 
-import axios from 'axios';
+import axios, { InternalAxiosRequestConfig } from 'axios';
 import { IBillResponse } from '@/models/billing';
 
 import {
@@ -31,12 +31,18 @@ import {
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
+interface InternalAxiosRequestConfigWithRetry
+  extends InternalAxiosRequestConfig {
+  retry?: number;
+}
+
 // Add a request interceptor
 axios.interceptors.request.use(
-  function (config) {
+  function (config: InternalAxiosRequestConfigWithRetry) {
     // Do something before request is sent
     config.headers.Authorization =
       'bearer ' + localStorage.getItem('accessToken');
+    config['retry'] = 1;
     return config;
   },
   function (error) {
@@ -52,13 +58,17 @@ axios.interceptors.response.use(
     return response;
   },
   async (error) => {
+    if (error.config.url.includes('/auth/refreshToken')) {
+      window.location.href = '/sign-in';
+      return;
+    }
     // Do something with response error
     if (error.response && error.response.status === 401) {
       // Access token has expired, refresh it
-      if (error.config.url.includes('/auth/refreshToken')) {
-        window.location.href = '/sign-in';
-        return;
+      if (!error.config || !error.config.retry) {
+        return Promise.reject(error);
       }
+      error.config.retry -= 1;
       try {
         const newAccessToken = await refreshAccessToken();
         // Update the request headers with the new access token
@@ -77,7 +87,13 @@ axios.interceptors.response.use(
 );
 
 const refreshAccessToken = () =>
-  axios.post<ILoginResponse>(`${serverUrl}/auth/refreshToken`, {}, {});
+  axios.post<ILoginResponse>(
+    `${serverUrl}/auth/refreshToken`,
+    {},
+    {
+      withCredentials: true,
+    },
+  );
 
 export const login = (apiArgs: ILoginRequest) =>
   axios.post<ILoginResponse>(`${serverUrl}/auth/login`, apiArgs);
