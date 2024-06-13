@@ -32,22 +32,28 @@ const filterText = new Map<string, string>([
 function createRange(range: 'current_week' | 'previous_week' | string) {
   switch (range) {
     case 'current_week': {
-      const curr = new Date(); // get current date
-      const first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+      const currentDate = moment();
 
-      const startDate = new Date(curr.setDate(first)).toUTCString();
-      const endDate = new Date(
-        moment(startDate).add(6, 'd').toString(),
+      const startDate = new Date(
+        currentDate.clone().startOf('isoWeek').format('"MMMM Do,dddd"'),
       ).toUTCString();
+      const endDate = new Date(
+        currentDate.clone().endOf('isoWeek').format('"MMMM Do,dddd"'),
+      ).toUTCString();
+      // const startDate = new Date(curr.setDate(first)).toUTCString();
+      // const endDate = new Date(
+      //   moment(startDate).add(6, 'd').toString(),
+      // ).toUTCString();
       return { startDate, endDate };
     }
     case 'previous_week': {
-      const curr = new Date(); // get current date
-      const first = curr.getDate() - curr.getDay() - 1; // First day is the day of the month - the day of the week
+      const currentDate = moment().startOf('isoWeek').subtract(1, 'd');
 
-      const endDate = new Date(curr.setDate(first)).toUTCString();
       const startDate = new Date(
-        moment(endDate).subtract(6, 'd').toString(),
+        currentDate.clone().startOf('isoWeek').format('"MMMM Do,dddd"'),
+      ).toUTCString();
+      const endDate = new Date(
+        currentDate.clone().endOf('isoWeek').format('"MMMM Do,dddd"'),
       ).toUTCString();
 
       return { startDate, endDate };
