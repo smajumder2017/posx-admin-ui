@@ -35,10 +35,10 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
       const currentDate = moment();
 
       const startDate = new Date(
-        currentDate.clone().startOf('isoWeek').format('"MMMM Do,dddd"'),
+        currentDate.clone().startOf('isoWeek').toString(),
       ).toUTCString();
       const endDate = new Date(
-        currentDate.clone().endOf('isoWeek').format('"MMMM Do,dddd"'),
+        currentDate.clone().endOf('isoWeek').toString(),
       ).toUTCString();
       // const startDate = new Date(curr.setDate(first)).toUTCString();
       // const endDate = new Date(
@@ -50,10 +50,10 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
       const currentDate = moment().startOf('isoWeek').subtract(1, 'd');
 
       const startDate = new Date(
-        currentDate.clone().startOf('isoWeek').format('"MMMM Do,dddd"'),
+        currentDate.clone().startOf('isoWeek').toString(),
       ).toUTCString();
       const endDate = new Date(
-        currentDate.clone().endOf('isoWeek').format('"MMMM Do,dddd"'),
+        currentDate.clone().endOf('isoWeek').toString(),
       ).toUTCString();
 
       return { startDate, endDate };
