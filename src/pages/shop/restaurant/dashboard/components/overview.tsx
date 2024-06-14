@@ -9,7 +9,8 @@ import {
   YAxis,
   Tooltip,
   LabelList,
-  CartesianGrid,
+  // CartesianGrid,
+  ReferenceLine,
 } from 'recharts';
 
 // const data = [
@@ -64,6 +65,7 @@ import {
 // ];
 interface IOverviewProps {
   data: ISalesSeriesData[];
+  lastPeriodTotalSales: number;
 }
 
 // const CustomLabel = (props: any) => {
@@ -77,11 +79,14 @@ interface IOverviewProps {
 //     </text>
 //   );
 // };
-export const Overview: React.FC<IOverviewProps> = ({ data }) => {
+export const Overview: React.FC<IOverviewProps> = ({
+  data,
+  lastPeriodTotalSales,
+}) => {
   return (
-    <ResponsiveContainer width="100%" height={350}>
+    <ResponsiveContainer width="100%" height={370}>
       <BarChart data={data}>
-        <CartesianGrid stroke="#f5f5f5" />
+        {/* <CartesianGrid stroke="#f5f5f5" /> */}
         <XAxis
           dataKey="name"
           stroke="#888888"
@@ -124,6 +129,16 @@ export const Overview: React.FC<IOverviewProps> = ({ data }) => {
             position="top"
           />
         </Bar>
+        {lastPeriodTotalSales && (
+          <ReferenceLine
+            ifOverflow="extendDomain"
+            y={lastPeriodTotalSales / 7}
+            label={`${formatPrice(lastPeriodTotalSales / 7, { maximumFractionDigits: 0 })}`}
+            stroke="#888888"
+            isFront={true}
+            strokeDasharray="3 3"
+          />
+        )}
       </BarChart>
     </ResponsiveContainer>
   );

@@ -69,6 +69,7 @@ export default function Dashboard() {
     'current_week',
   );
   const [salesByDate, setSalesByDate] = useState<ISalesSeriesData[]>([]);
+  const [lastPeriodTotalSales, setLastPeriodTotalSales] = useState(0);
 
   const getSales = async (
     shopId: string,
@@ -82,6 +83,7 @@ export default function Dashboard() {
           name: key,
         })),
       );
+      setLastPeriodTotalSales(response.data.lastPeriodTotalSales);
     } catch (error) {
       console.log(error);
     }
@@ -219,7 +221,10 @@ export default function Dashboard() {
                 <CardTitle>Overview</CardTitle>
               </CardHeader>
               <CardContent className="pl-2">
-                <Overview data={salesByDate} />
+                <Overview
+                  data={salesByDate}
+                  lastPeriodTotalSales={lastPeriodTotalSales}
+                />
               </CardContent>
             </Card>
             <Card className="col-span-1 lg:col-span-3">

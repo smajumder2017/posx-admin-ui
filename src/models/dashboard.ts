@@ -2,6 +2,7 @@ export interface ISalesResponse {
   salesByDate: {
     [key: string]: ISalesData;
   };
+  lastPeriodTotalSales: number;
 }
 
 export interface ISalesData {
