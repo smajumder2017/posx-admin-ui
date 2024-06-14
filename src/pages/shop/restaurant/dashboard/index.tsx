@@ -139,7 +139,7 @@ export default function Dashboard() {
             <TabsTrigger value="notifications">Notifications</TabsTrigger> */}
           </TabsList>
           <Select value={range} onValueChange={handleDateRangeChange}>
-            <SelectTrigger className="w-36 bg-white">
+            <SelectTrigger className="w-36 bg-white dark:bg-primary-foreground">
               <SelectValue>{filterText.get(range)}</SelectValue>
             </SelectTrigger>
             <SelectContent>

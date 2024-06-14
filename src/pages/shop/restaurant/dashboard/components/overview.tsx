@@ -1,3 +1,4 @@
+import { useTheme } from '@/components/theme-provider';
 import { ISalesSeriesData } from '@/models/dashboard';
 import { formatPrice } from '@/utils/currency';
 import React from 'react';
@@ -83,9 +84,11 @@ export const Overview: React.FC<IOverviewProps> = ({
   data,
   lastPeriodTotalSales,
 }) => {
+  const { theme } = useTheme();
+  console.log(theme);
   return (
     <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={data} margin={{ top: 10 }}>
+      <BarChart data={data} margin={{ top: 20 }}>
         {/* <CartesianGrid stroke="#f5f5f5" /> */}
         <XAxis
           dataKey="name"
@@ -104,7 +107,10 @@ export const Overview: React.FC<IOverviewProps> = ({
           }
         />
 
-        <Tooltip cursor={{ fill: '#f3f4f6' }} />
+        <Tooltip
+          cursor={{ fill: theme === 'dark' ? '#888888' : '#f3f4f6' }}
+          labelClassName="color-primary"
+        />
         <Bar
           dataKey="cash"
           stackId={'1'}
