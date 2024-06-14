@@ -84,8 +84,8 @@ export const Overview: React.FC<IOverviewProps> = ({
   lastPeriodTotalSales,
 }) => {
   return (
-    <ResponsiveContainer width="100%" height={390}>
-      <BarChart data={data}>
+    <ResponsiveContainer width="100%" height={350}>
+      <BarChart data={data} style={{ overflow: 'visible' }}>
         {/* <CartesianGrid stroke="#f5f5f5" /> */}
         <XAxis
           dataKey="name"
