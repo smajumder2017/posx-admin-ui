@@ -4,7 +4,7 @@ import { IResponseError } from '../../models/common';
 import { RequestStatus } from '../../utils/enums';
 
 import * as api from './../../apis';
-import { IShopResponse } from '@/models/shop';
+import { IShopResponse, IUpdateShopRequest } from '@/models/shop';
 
 type SliceState<T> = {
   data: T | null;
@@ -18,17 +18,17 @@ const initialState: SliceState<IShopResponse> = {
   asyncStatus: RequestStatus.Init,
 };
 
-// export const login = createAsyncThunk(
-//   "auth/login",
-//   async (payload: ILoginRequest, thunkApi) => {
-//     try {
-//       const response = await api.login(payload);
-//       return response;
-//     } catch (error) {
-//       return thunkApi.rejectWithValue(error);
-//     }
-//   }
-// );
+export const updateShopDetails = createAsyncThunk(
+  'shop/updateShop',
+  async (payload: IUpdateShopRequest, thunkApi) => {
+    try {
+      const response = await api.updateShop(payload);
+      return response.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  },
+);
 
 // export const logout = createAsyncThunk("auth/logout", async (_, thunkApi) => {
 //   try {
@@ -56,18 +56,18 @@ const shopSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // builder
-    //   .addCase(login.pending, (state, action) => {
-    //     state.asyncStatus = RequestStatus.Loading;
-    //   })
-    //   .addCase(login.fulfilled, (state, action) => {
-    //     state.asyncStatus = RequestStatus.Success;
-    //     state.data = { ...state.data, ...action.payload };
-    //   })
-    //   .addCase(login.rejected, (state, action) => {
-    //     state.asyncStatus = RequestStatus.Failed;
-    //     state.error = action.error;
-    //   });
+    builder
+      .addCase(updateShopDetails.pending, (state, _action) => {
+        state.asyncStatus = RequestStatus.Loading;
+      })
+      .addCase(updateShopDetails.fulfilled, (state, action) => {
+        state.asyncStatus = RequestStatus.Success;
+        state.data = { ...state.data, ...action.payload };
+      })
+      .addCase(updateShopDetails.rejected, (state, action) => {
+        state.asyncStatus = RequestStatus.Failed;
+        state.error = action.error;
+      });
 
     builder
       .addCase(getShopDetails.pending, (state) => {

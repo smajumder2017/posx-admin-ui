@@ -27,6 +27,13 @@ export interface ICreateShopRequest
     'id' | 'shopCode' | 'createdAt' | 'updatedAt' | 'shopType'
   > {}
 
+export interface IUpdateShopRequest
+  extends Partial<
+    Omit<IShopResponse, 'shopCode' | 'createdAt' | 'updatedAt' | 'shopType'>
+  > {
+  id: string;
+}
+
 export interface ShopType {
   id: number;
   value: string;
@@ -41,4 +48,22 @@ export interface IUserShopResponse {
   createdAt: string;
   updatedAt: string;
   shop: IShopResponse;
+}
+
+export interface IDeliveryConfig {
+  enabled: boolean;
+  serviceRadius: number;
+  deliveryCharges: Array<{ distance: number; amount: number }>;
+}
+
+export interface IShopConfigRequest {
+  id?: string;
+  shopId: string;
+  config: {
+    delivery: IDeliveryConfig;
+  };
+}
+
+export interface IShopConfigResponse extends IShopConfigRequest {
+  id: string;
 }

@@ -90,12 +90,7 @@ const router = createBrowserRouter([
             .default,
         }),
       },
-      {
-        path: 'settings',
-        lazy: async () => ({
-          Component: (await import('@/pages/shop/restaurant/settings')).default,
-        }),
-      },
+
       {
         path: 'extra-components',
         lazy: async () => ({
@@ -105,26 +100,32 @@ const router = createBrowserRouter([
       {
         path: 'settings',
         lazy: async () => ({
-          Component: (await import('./pages/settings')).default,
+          Component: (await import('@/pages/shop/restaurant/settings')).default,
         }),
         errorElement: <GeneralError />,
         children: [
           {
             index: true,
             lazy: async () => ({
-              Component: (await import('./pages/settings/profile')).default,
+              Component: (
+                await import('@/pages/shop/restaurant/settings/shop-details')
+              ).default,
             }),
           },
           {
-            path: 'account',
+            path: 'delivery',
             lazy: async () => ({
-              Component: (await import('./pages/settings/account')).default,
+              Component: (
+                await import('@/pages/shop/restaurant/settings/delivery')
+              ).default,
             }),
           },
           {
-            path: 'appearance',
+            path: 'gstandcharges',
             lazy: async () => ({
-              Component: (await import('./pages/settings/appearance')).default,
+              Component: (
+                await import('@/pages/shop/restaurant/settings/gst-and-charges')
+              ).default,
             }),
           },
           {

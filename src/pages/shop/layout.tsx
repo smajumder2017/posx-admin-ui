@@ -30,7 +30,7 @@ export default function ShopLayout() {
   useEffect(() => {
     if (content.current) {
       content.current.onscroll = () => {
-        console.log(content.current?.scrollTop);
+        // console.log(content.current?.scrollTop);
         if (content.current?.scrollTop === 0) {
           setScrolled(false);
         } else {
@@ -57,7 +57,7 @@ export default function ShopLayout() {
         />
         <main
           id="content"
-          className={`bg-muted/40 fixed left-0 right-0 top-0 overflow-x-hidden pt-16 transition-[margin] md:overflow-y-hidden md:pt-0 ${isCollapsed ? 'md:ml-14' : 'md:ml-64'} h-full`}
+          className={`fixed left-0 right-0 top-0 overflow-x-hidden pt-16 transition-[margin] md:overflow-y-hidden md:pt-0 ${isCollapsed ? 'md:ml-14' : 'md:ml-64'} h-full`}
         >
           <Layout>
             {/* ===== Top Heading ===== */}

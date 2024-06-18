@@ -14,7 +14,10 @@ import {
 import { IOrderResponse } from '@/models/order';
 import {
   ICreateShopRequest,
+  IShopConfigRequest,
+  IShopConfigResponse,
   IShopResponse,
+  IUpdateShopRequest,
   IUserShopResponse,
   ShopType,
 } from '@/models/shop';
@@ -175,7 +178,16 @@ export const getActiveBill = (orderId: string) =>
   axios.get<IBillResponse>(`${serverUrl}/billing/${orderId}`);
 
 export const createShop = (apiArgs: ICreateShopRequest) =>
-  axios.post<IBillResponse>(`${serverUrl}/shop`, apiArgs);
+  axios.post<IShopResponse>(`${serverUrl}/shop`, apiArgs);
+
+export const updateShop = (apiArgs: IUpdateShopRequest) =>
+  axios.put<IShopResponse>(`${serverUrl}/shop`, apiArgs);
+
+export const getShopConfig = (shopId: string) =>
+  axios.get<IShopConfigResponse>(`${serverUrl}/shop/config/${shopId}`);
+
+export const updateShopConfig = (apiArgs: IShopConfigRequest) =>
+  axios.patch<IShopConfigResponse>(`${serverUrl}/shop/config`, apiArgs);
 
 export const getShopTypes = (apiArgs: { skip: number; take: number }) =>
   axios.get<{ shopTypes: ShopType[]; count: number; hasNext: boolean }>(
