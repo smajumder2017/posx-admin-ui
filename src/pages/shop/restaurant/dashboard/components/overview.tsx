@@ -1,6 +1,7 @@
 import { useTheme } from '@/components/theme-provider';
 import { ISalesSeriesData } from '@/models/dashboard';
 import { formatPrice } from '@/utils/currency';
+import moment from 'moment';
 import React from 'react';
 import {
   Bar,
@@ -85,10 +86,11 @@ export const Overview: React.FC<IOverviewProps> = ({
   lastPeriodTotalSales,
 }) => {
   const { theme } = useTheme();
-  console.log(theme);
+  // console.log(theme);
+  console.log(data.length);
   return (
     <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={data} margin={{ top: 20 }}>
+      <BarChart data={data} margin={{ top: 50 }}>
         {/* <CartesianGrid stroke="#f5f5f5" /> */}
         <XAxis
           dataKey="name"
@@ -96,6 +98,11 @@ export const Overview: React.FC<IOverviewProps> = ({
           fontSize={12}
           tickLine={false}
           axisLine={false}
+          tickFormatter={(value) =>
+            data.length > 7
+              ? moment(value.split('/').reverse().join('-')).format('D')
+              : value
+          }
         />
         <YAxis
           stroke="#888888"
@@ -129,10 +136,13 @@ export const Overview: React.FC<IOverviewProps> = ({
         >
           <LabelList
             formatter={(value: number) =>
-              formatPrice(value, { maximumFractionDigits: 0 })
+              value ? formatPrice(value, { maximumFractionDigits: 0 }) : ''
             }
             dataKey="total"
             position="top"
+            fontSize={data.length > 7 ? '12px' : '14px'}
+            offset={data.length > 7 ? 30 : 5}
+            angle={data.length > 7 ? -90 : 0}
           />
         </Bar>
         {lastPeriodTotalSales && (
