@@ -88,13 +88,15 @@ export const Overview: React.FC<IOverviewProps> = ({
   const { theme } = useTheme();
   // console.log(theme);
   console.log(data.length);
+  const isDark = theme === 'dark';
   return (
     <ResponsiveContainer width="100%" height={350}>
       <BarChart data={data} margin={{ top: 50 }}>
         {/* <CartesianGrid stroke="#f5f5f5" /> */}
         <XAxis
           dataKey="name"
-          stroke="#888888"
+          // stroke="#888888"
+          className="fill-primary"
           fontSize={12}
           tickLine={false}
           axisLine={false}
@@ -105,7 +107,8 @@ export const Overview: React.FC<IOverviewProps> = ({
           }
         />
         <YAxis
-          stroke="#888888"
+          // stroke="#888888"
+          className="fill-primary"
           fontSize={12}
           tickLine={false}
           axisLine={false}
@@ -115,23 +118,36 @@ export const Overview: React.FC<IOverviewProps> = ({
         />
 
         <Tooltip
-          cursor={{ fill: theme === 'dark' ? '#888888' : '#f3f4f6' }}
-          labelClassName="color-primary"
+          cursor={{ fill: isDark ? '#1e293b' : '#f3f4f6' }}
+          contentStyle={{
+            background: 'hsl(var(--background))',
+            color: 'hsl(var(--foreground))',
+            border: '1px solid hsl(var(--border))',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+            fontWeight: 'bold',
+          }}
+          itemStyle={{
+            color: 'hsl(var(--foreground))!',
+            fontSize: '0.875rem',
+            fontWeight: 'normal',
+          }}
+          // labelClassName={`color-primary ${theme === 'dark' ? 'bg-primary' : ''}`}
         />
         <Bar
           dataKey="cash"
           stackId={'1'}
           // fill="#e5e7eb"
           // radius={[4, 4, 0, 0]}
-          className="fill-gray-200"
+          className={'fill-muted'}
           // label={<CustomLabel />}
         ></Bar>
         <Bar
           stackId={'1'}
           dataKey="upi"
-          fill="currentColor"
+          // fill="currentColor"
           radius={[4, 4, 0, 0]}
-          className="fill-primary"
+          className={'fill-primary'}
           // label={<CustomLabel />}
         >
           <LabelList
