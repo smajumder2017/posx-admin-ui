@@ -21,7 +21,7 @@ import {
   IUserShopResponse,
   ShopType,
 } from '@/models/shop';
-import { ISalesResponse } from '@/models/dashboard';
+import { IItemsSalesResponse, ISalesResponse } from '@/models/dashboard';
 
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import { IBillResponse } from '@/models/billing';
@@ -225,3 +225,12 @@ export const getSalesDataByRange = (
   range: { startDate: string; endDate: string },
 ) =>
   axios.post<ISalesResponse>(`${serverUrl}/dashboard/sales/${shopId}`, range);
+
+export const getItemSalesDataByRange = (
+  shopId: string,
+  range: { startDate: string; endDate: string },
+) =>
+  axios.post<IItemsSalesResponse>(
+    `${serverUrl}/dashboard/itemsales/${shopId}`,
+    range,
+  );

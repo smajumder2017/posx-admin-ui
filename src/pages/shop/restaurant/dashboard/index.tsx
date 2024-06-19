@@ -9,7 +9,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RecentSales } from './components/recent-sales';
 import { Overview } from './components/overview';
-import { ISalesSeriesData } from '@/models/dashboard';
+import { IItemsSalesResponse, ISalesSeriesData } from '@/models/dashboard';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import * as apis from '@/apis';
@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import moment from 'moment';
+import ItemSales from './components/item-sales';
 
 const filterText = new Map<string, string>([
   ['current_week', 'This Week'],
@@ -69,6 +70,7 @@ export default function Dashboard() {
     'current_week',
   );
   const [salesByDate, setSalesByDate] = useState<ISalesSeriesData[]>([]);
+  const [itemSales, setItemSales] = useState<IItemsSalesResponse>();
   const [lastPeriodTotalSales, setLastPeriodTotalSales] = useState(0);
 
   const getSales = async (
@@ -89,10 +91,23 @@ export default function Dashboard() {
     }
   };
 
+  const getItemSales = async (
+    shopId: string,
+    range: { startDate: string; endDate: string },
+  ) => {
+    try {
+      const response = await apis.getItemSalesDataByRange(shopId, range);
+      setItemSales(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const dateRange = createRange(range);
     if (shopId && dateRange) {
       getSales(shopId, dateRange);
+      getItemSales(shopId, dateRange);
     }
   }, [shopId, range]);
 
@@ -236,6 +251,10 @@ export default function Dashboard() {
                 <RecentSales />
               </CardContent>
             </Card>
+          </div>
+
+          <div>
+            <ItemSales data={itemSales} />
           </div>
         </TabsContent>
       </Tabs>
