@@ -28,6 +28,7 @@ import ItemSales from './components/item-sales';
 const filterText = new Map<string, string>([
   ['current_week', 'This Week'],
   ['previous_week', 'Last Week'],
+  ['current_month', 'This Month'],
 ]);
 
 function createRange(range: 'current_week' | 'previous_week' | string) {
@@ -36,10 +37,10 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
       const currentDate = moment();
 
       const startDate = new Date(
-        currentDate.clone().startOf('isoWeek').toString(),
+        currentDate.clone().startOf('isoWeek').format('YYYY-MM-DD').toString(),
       ).toUTCString();
       const endDate = new Date(
-        currentDate.clone().endOf('isoWeek').toString(),
+        currentDate.clone().endOf('isoWeek').format('YYYY-MM-DD').toString(),
       ).toUTCString();
       // const startDate = new Date(curr.setDate(first)).toUTCString();
       // const endDate = new Date(
@@ -51,10 +52,22 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
       const currentDate = moment().startOf('isoWeek').subtract(1, 'd');
 
       const startDate = new Date(
-        currentDate.clone().startOf('isoWeek').toString(),
+        currentDate.clone().startOf('isoWeek').format('YYYY-MM-DD').toString(),
       ).toUTCString();
       const endDate = new Date(
-        currentDate.clone().endOf('isoWeek').toString(),
+        currentDate.clone().endOf('isoWeek').format('YYYY-MM-DD').toString(),
+      ).toUTCString();
+
+      return { startDate, endDate };
+    }
+
+    case 'current_month': {
+      const currentDate = moment().startOf('M');
+      const startDate = new Date(
+        currentDate.format('YYYY-MM-DD').toString(),
+      ).toUTCString();
+      const endDate = new Date(
+        currentDate.endOf('M').format('YYYY-MM-DD').toString(),
       ).toUTCString();
 
       return { startDate, endDate };
@@ -66,9 +79,9 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
 
 export default function Dashboard() {
   const { shopId } = useParams<{ shopId: string }>();
-  const [range, setRange] = useState<'current_week' | 'previous_week' | string>(
-    'current_week',
-  );
+  const [range, setRange] = useState<
+    'current_week' | 'previous_week' | 'current_month' | string
+  >('current_week');
   const [salesByDate, setSalesByDate] = useState<ISalesSeriesData[]>([]);
   const [itemSales, setItemSales] = useState<IItemsSalesResponse>();
   const [lastPeriodTotalSales, setLastPeriodTotalSales] = useState(0);
@@ -112,7 +125,7 @@ export default function Dashboard() {
   }, [shopId, range]);
 
   const handleDateRangeChange = (
-    range: 'current_week' | 'previous_week' | string,
+    range: 'current_week' | 'previous_week' | 'current_month' | string,
   ) => {
     setRange(range);
   };
@@ -163,6 +176,9 @@ export default function Dashboard() {
               </SelectItem>
               <SelectItem value="previous_week">
                 {filterText.get('previous_week')}
+              </SelectItem>
+              <SelectItem value="current_month">
+                {filterText.get('current_month')}
               </SelectItem>
             </SelectContent>
           </Select>
