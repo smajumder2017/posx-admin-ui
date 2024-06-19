@@ -86,8 +86,6 @@ export const Overview: React.FC<IOverviewProps> = ({
   lastPeriodTotalSales,
 }) => {
   const { theme } = useTheme();
-  // console.log(theme);
-  console.log(data.length);
   const isDark = theme === 'dark';
   return (
     <ResponsiveContainer width="100%" height={350}>

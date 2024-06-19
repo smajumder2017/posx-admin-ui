@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { RecentSales } from './components/recent-sales';
 import { Overview } from './components/overview';
 import { IItemsSalesResponse, ISalesSeriesData } from '@/models/dashboard';
 import { useState, useEffect } from 'react';
@@ -24,6 +23,7 @@ import {
 } from '@/components/ui/select';
 import moment from 'moment';
 import ItemSales from './components/item-sales';
+import ItemSalesShare from './components/items-sales-share';
 
 const filterText = new Map<string, string>([
   ['current_week', 'This Week'],
@@ -260,11 +260,14 @@ export default function Dashboard() {
             </Card>
             <Card className="col-span-1 lg:col-span-3">
               <CardHeader>
-                <CardTitle>Recent Sales</CardTitle>
-                <CardDescription>Showing last 5 sales</CardDescription>
+                <CardTitle>Item Sales Share</CardTitle>
+                <CardDescription>
+                  Total items sold in the given date range
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <RecentSales />
+                {/* <RecentSales /> */}
+                <ItemSalesShare data={itemSales} />
               </CardContent>
             </Card>
           </div>
