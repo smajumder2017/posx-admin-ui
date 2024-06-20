@@ -97,7 +97,11 @@ const ItemSalesShare: React.FC<IItemSalesShareProps> = ({ data }) => {
           }}
           // labelClassName={`color-primary ${theme === 'dark' ? 'bg-primary' : ''}`}
         />
-        <Legend verticalAlign="bottom" align="center" />
+        <Legend
+          verticalAlign="bottom"
+          align="center"
+          wrapperStyle={{ fontSize: '12px' }}
+        />
       </PieChart>
     </ResponsiveContainer>
   );
