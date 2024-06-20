@@ -42,8 +42,8 @@ const ItemSalesShare: React.FC<IItemSalesShareProps> = ({ data }) => {
     .sort((a, b) => a.value - b.value);
 
   const COLORS = getRandomColor(
-    isDark ? '#020817' : '#d1d5db',
-    isDark ? '#d1d5db' : '#020817',
+    isDark ? '#f9fafb' : '#d1d5db',
+    isDark ? '#6b7280' : '#020817',
     chartData.length,
   );
 
