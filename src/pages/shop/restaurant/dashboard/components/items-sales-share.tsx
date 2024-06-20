@@ -1,7 +1,21 @@
 import { useTheme } from '@/components/theme-provider';
 import { IItemsSalesResponse } from '@/models/dashboard';
-import { PieChart, Pie, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  PieChart,
+  Pie,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+  Legend,
+} from 'recharts';
+import Rainbow from 'rainbowvis.js';
 
+function getRandomColor(from: string, to: string, nos = 1) {
+  const rainbow = new Rainbow();
+  rainbow.setSpectrum(from, to);
+  rainbow.setNumberRange(1, nos);
+  return rainbow;
+}
 interface IItemSalesShareProps {
   data?: IItemsSalesResponse;
 }
@@ -20,10 +34,23 @@ const ItemSalesShare: React.FC<IItemSalesShareProps> = ({ data }) => {
     {},
   );
 
-  const chartData = Object.keys(groupedData).map((itemName) => ({
-    name: itemName,
-    value: groupedData[itemName],
-  }));
+  const chartData = Object.keys(groupedData)
+    .map((itemName) => ({
+      name: itemName,
+      value: groupedData[itemName],
+    }))
+    .sort((a, b) => a.value - b.value);
+
+  const COLORS = getRandomColor(
+    isDark ? '#020817' : '#d1d5db',
+    isDark ? '#d1d5db' : '#020817',
+    chartData.length,
+  );
+
+  // const COLORS = getRandomColor(
+  //   isDark ? '#f3f4f6' : '#1e293b',
+  //   chartData.length,
+  // );
 
   return (
     <ResponsiveContainer width="100%" height={350}>
@@ -45,13 +72,14 @@ const ItemSalesShare: React.FC<IItemSalesShareProps> = ({ data }) => {
           cy="50%"
           innerRadius={60}
           outerRadius={100}
-          className={'fill-primary'}
           paddingAngle={2}
           labelLine={false}
           label
-          legendType="circle"
-        />
-
+        >
+          {chartData.map((_entry, index) => (
+            <Cell key={`cell-${index}`} fill={`#${COLORS.colorAt(index)}`} />
+          ))}
+        </Pie>
         <Tooltip
           cursor={{ fill: isDark ? '#1e293b' : '#f3f4f6' }}
           contentStyle={{
@@ -69,6 +97,7 @@ const ItemSalesShare: React.FC<IItemSalesShareProps> = ({ data }) => {
           }}
           // labelClassName={`color-primary ${theme === 'dark' ? 'bg-primary' : ''}`}
         />
+        <Legend verticalAlign="bottom" align="center" />
       </PieChart>
     </ResponsiveContainer>
   );

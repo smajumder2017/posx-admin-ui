@@ -137,7 +137,7 @@ export const Overview: React.FC<IOverviewProps> = ({
           stackId={'1'}
           // fill="#e5e7eb"
           // radius={[4, 4, 0, 0]}
-          className={'fill-muted'}
+          className={'fill-primary opacity-30'}
           // label={<CustomLabel />}
         ></Bar>
         <Bar
