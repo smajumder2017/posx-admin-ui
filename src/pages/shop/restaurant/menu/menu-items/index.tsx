@@ -99,7 +99,12 @@ const Menutems = () => {
         skip: 0,
         take: 100,
       });
-      setMenuItems(menuItemRes.data.menuItems);
+      setMenuItems(
+        menuItemRes.data.menuItems.sort(
+          (a, b) =>
+            (a.category?.displayIndex || 1) - (b.category?.displayIndex || 1),
+        ),
+      );
     } catch (error) {
       console.log(error);
     }
