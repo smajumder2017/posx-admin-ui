@@ -6,7 +6,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
-  Legend,
+  // Legend,
 } from 'recharts';
 import Rainbow from 'rainbowvis.js';
 
@@ -97,11 +97,11 @@ const ItemSalesShare: React.FC<IItemSalesShareProps> = ({ data }) => {
           }}
           // labelClassName={`color-primary ${theme === 'dark' ? 'bg-primary' : ''}`}
         />
-        <Legend
+        {/* <Legend
           verticalAlign="bottom"
           align="center"
           wrapperStyle={{ fontSize: '12px' }}
-        />
+        /> */}
       </PieChart>
     </ResponsiveContainer>
   );
