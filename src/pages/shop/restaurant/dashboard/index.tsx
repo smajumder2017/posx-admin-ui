@@ -29,6 +29,7 @@ const filterText = new Map<string, string>([
   ['current_week', 'This Week'],
   ['previous_week', 'Last Week'],
   ['current_month', 'This Month'],
+  ['last_month', 'Last Month'],
 ]);
 
 function createRange(range: 'current_week' | 'previous_week' | string) {
@@ -72,6 +73,17 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
 
       return { startDate, endDate };
     }
+    case 'last_month': {
+      const currentDate = moment().startOf('M').subtract(1, 'd');
+      const startDate = new Date(
+        currentDate.startOf('M').format('YYYY-MM-DD').toString(),
+      ).toUTCString();
+      const endDate = new Date(
+        currentDate.endOf('M').format('YYYY-MM-DD').toString(),
+      ).toUTCString();
+
+      return { startDate, endDate };
+    }
     default:
       break;
   }
@@ -80,7 +92,7 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
 export default function Dashboard() {
   const { shopId } = useParams<{ shopId: string }>();
   const [range, setRange] = useState<
-    'current_week' | 'previous_week' | 'current_month' | string
+    'current_week' | 'previous_week' | 'current_month' | 'last_month' | string
   >('current_week');
   const [salesByDate, setSalesByDate] = useState<ISalesSeriesData[]>([]);
   const [itemSales, setItemSales] = useState<IItemsSalesResponse>();
@@ -125,7 +137,12 @@ export default function Dashboard() {
   }, [shopId, range]);
 
   const handleDateRangeChange = (
-    range: 'current_week' | 'previous_week' | 'current_month' | string,
+    range:
+      | 'current_week'
+      | 'previous_week'
+      | 'current_month'
+      | 'last_month'
+      | string,
   ) => {
     setRange(range);
   };
@@ -179,6 +196,9 @@ export default function Dashboard() {
               </SelectItem>
               <SelectItem value="current_month">
                 {filterText.get('current_month')}
+              </SelectItem>
+              <SelectItem value="last_month">
+                {filterText.get('last_month')}
               </SelectItem>
             </SelectContent>
           </Select>
