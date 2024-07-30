@@ -22,6 +22,7 @@ export interface IMenuItem {
   isActive: boolean;
   foodType: string;
   price: number;
+  onlineDeliveryPrice: number;
   waitingTime: number;
   spiceScale: string;
   servingTime: string;
@@ -61,6 +62,7 @@ export interface ICreateMenuItem {
   categoryId: string;
   foodType: string;
   price: number;
+  onlineDeliveryPrice?: number;
   waitingTime?: number;
   spiceScale: string;
   servingTime?: string[];

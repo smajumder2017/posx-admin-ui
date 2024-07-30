@@ -63,6 +63,7 @@ const menuItemSchema = z.object({
   foodType: z.string(),
   spiceScale: z.string(),
   price: z.string(),
+  onlineDeliveryPrice: z.string(),
 });
 
 const Menutems = () => {
@@ -86,6 +87,7 @@ const Menutems = () => {
       foodType: '',
       spiceScale: '',
       price: '',
+      onlineDeliveryPrice: '',
       availability: false,
     },
   });
@@ -165,10 +167,16 @@ const Menutems = () => {
           id: selectedMenuItem,
           shopId,
           price: parseInt(values.price),
+          onlineDeliveryPrice: parseInt(values.onlineDeliveryPrice),
         });
         return;
       }
-      handleItemCreate({ ...values, price: parseInt(values.price), shopId });
+      handleItemCreate({
+        ...values,
+        price: parseInt(values.price),
+        onlineDeliveryPrice: parseInt(values.onlineDeliveryPrice),
+        shopId,
+      });
     }
   }
 
@@ -181,6 +189,10 @@ const Menutems = () => {
       menuItemForm.setValue('foodType', menuItem.foodType);
       menuItemForm.setValue('spiceScale', menuItem.spiceScale);
       menuItemForm.setValue('price', menuItem.price.toString());
+      menuItemForm.setValue(
+        'onlineDeliveryPrice',
+        menuItem.onlineDeliveryPrice?.toString(),
+      );
       menuItemForm.setValue('availability', menuItem.availability);
 
       setSelectedMenuItem(itemId);
@@ -400,6 +412,25 @@ const Menutems = () => {
                       </FormControl>
                       <FormDescription>
                         This will be selling price of your dish.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={menuItemForm.control}
+                  name="onlineDeliveryPrice"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Online Delivery Price</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter item price (Online Delivery)"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        This will be online delivery price of your dish.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>

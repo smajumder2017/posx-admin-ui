@@ -51,6 +51,9 @@ const MenuItemList: React.FC<IMenuItemListProps> = ({ data, onEditClick }) => {
           <TableHead className="hidden md:table-cell">Type</TableHead>
           <TableHead className="hidden md:table-cell">Spice Scale</TableHead>
           <TableHead className="hidden md:table-cell">Price</TableHead>
+          <TableHead className="hidden md:table-cell">
+            Online Delivery Price
+          </TableHead>
           <TableHead className="hidden md:table-cell">Availability</TableHead>
           <TableHead className="hidden md:table-cell text-center">
             Actions
@@ -107,6 +110,9 @@ const MenuItemList: React.FC<IMenuItemListProps> = ({ data, onEditClick }) => {
               </TableCell>
               <TableCell className="hidden sm:table-cell">
                 {formatPrice(item.price)}
+              </TableCell>
+              <TableCell className="hidden sm:table-cell">
+                {formatPrice(item.onlineDeliveryPrice)}
               </TableCell>
               <TableCell className="hidden sm:table-cell">
                 {item.availability ? 'Available' : 'Not Avialable'}
