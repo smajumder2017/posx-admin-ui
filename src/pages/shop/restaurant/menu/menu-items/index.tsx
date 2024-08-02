@@ -56,7 +56,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
 const menuItemSchema = z.object({
-  itemName: z.string().min(2).max(50),
+  itemName: z.string().min(2).max(100),
   description: z.string(),
   availability: z.boolean(),
   categoryId: z.string(),
