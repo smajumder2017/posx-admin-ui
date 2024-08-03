@@ -38,8 +38,13 @@ export const SpiceLevel: React.FC<
 interface IMenuItemListProps {
   data: IMenuItem[];
   onEditClick?: (id: string) => void;
+  onDeleteClick?: (id: string) => void;
 }
-const MenuItemList: React.FC<IMenuItemListProps> = ({ data, onEditClick }) => {
+const MenuItemList: React.FC<IMenuItemListProps> = ({
+  data,
+  onEditClick,
+  onDeleteClick,
+}) => {
   return (
     <Table>
       <TableHeader>
@@ -127,7 +132,11 @@ const MenuItemList: React.FC<IMenuItemListProps> = ({ data, onEditClick }) => {
                 >
                   <MdModeEditOutline />
                 </Button>
-                <Button variant={'outline'} size={'icon'}>
+                <Button
+                  variant={'outline'}
+                  size={'icon'}
+                  onClick={() => onDeleteClick?.(item.id)}
+                >
                   <MdOutlineDeleteOutline />
                 </Button>
               </TableCell>

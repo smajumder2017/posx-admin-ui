@@ -54,6 +54,17 @@ import { Loader } from '@/components/custom/loader';
 import { getErrorMessage } from '@/utils/processApiError';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 const menuItemSchema = z.object({
   itemName: z.string().min(2).max(100),
@@ -77,6 +88,7 @@ const Menutems = () => {
   const [error, setError] = useState<{ title: string; message: string } | null>(
     null,
   );
+  const [itemToDelete, setItemToDelete] = useState<string>('');
 
   const menuItemForm = useForm<z.infer<typeof menuItemSchema>>({
     resolver: zodResolver(menuItemSchema),
@@ -141,7 +153,7 @@ const Menutems = () => {
     setSaving(false);
   };
 
-  const handleCategoryUpdate = async (payload: IUpdateMenuItem) => {
+  const handleMenuItemUpdate = async (payload: IUpdateMenuItem) => {
     setError(null);
     setSaving(true);
     try {
@@ -162,7 +174,7 @@ const Menutems = () => {
     console.log(values);
     if (shopId) {
       if (selectedMenuItem) {
-        handleCategoryUpdate({
+        handleMenuItemUpdate({
           ...values,
           id: selectedMenuItem,
           shopId,
@@ -200,6 +212,23 @@ const Menutems = () => {
     }
   };
 
+  const handleItemDelete = async (itemId: string) => {
+    const menuItem = menuItems.find((item) => item.id === itemId);
+    if (menuItem) {
+      delete menuItem.category;
+      await handleMenuItemUpdate({
+        ...menuItem,
+        id: itemId,
+        isActive: false,
+      });
+      setItemToDelete('');
+    }
+  };
+
+  const handleDeleteClick = (itemId: string) => {
+    setItemToDelete(itemId);
+  };
+
   const handleItemDialogClose = (value: boolean) => {
     setMenuItemDialog(value);
     menuItemForm.reset();
@@ -232,7 +261,11 @@ const Menutems = () => {
         {loader && <Loader />}
         <CardContent>
           {menuItems.length ? (
-            <MenuItemList data={menuItems} onEditClick={handleEditClick} />
+            <MenuItemList
+              data={menuItems.filter((item) => item.isActive)}
+              onEditClick={handleEditClick}
+              onDeleteClick={handleDeleteClick}
+            />
           ) : null}
         </CardContent>
       </Card>
@@ -475,6 +508,31 @@ const Menutems = () => {
           </Form>
         </DialogContent>
       </Dialog>
+      <AlertDialog
+        open={!!itemToDelete}
+        onOpenChange={() => {
+          setItemToDelete('');
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your
+              item.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <Button
+              variant={'destructive'}
+              onClick={() => handleItemDelete(itemToDelete)}
+            >
+              Delete
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

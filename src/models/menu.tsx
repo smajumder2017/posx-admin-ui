@@ -65,7 +65,7 @@ export interface ICreateMenuItem {
   onlineDeliveryPrice?: number;
   waitingTime?: number;
   spiceScale: string;
-  servingTime?: string[];
+  servingTime?: string;
   itemImageUrl?: string;
   remoteImageId?: string;
   shopId: string;
