@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '@/hooks/redux';
-import { IUpdateShopRequest } from '@/models/shop';
+import { IShopResponse, IUpdateShopRequest } from '@/models/shop';
 import { updateShopDetails } from '@/redux/features/shopSlice';
 
 const shopDetailsFormSchema = z.object({
@@ -66,8 +66,10 @@ export function GstAndChargesForm() {
     setIsLoading(true);
     try {
       if (shopDetails) {
+        const shopInfo: Partial<IShopResponse> = { ...shopDetails };
+        delete shopInfo.shopType;
         const payload: IUpdateShopRequest = {
-          ...shopDetails,
+          ...shopInfo,
           ...data,
           id: shopDetails.id,
           shopTypeId: shopDetails.shopTypeId,
