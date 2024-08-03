@@ -67,6 +67,7 @@ export function GstAndChargesForm() {
     try {
       if (shopDetails) {
         const payload: IUpdateShopRequest = {
+          ...shopDetails,
           ...data,
           id: shopDetails.id,
           shopTypeId: shopDetails.shopTypeId,
