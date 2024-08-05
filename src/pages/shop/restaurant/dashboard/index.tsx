@@ -68,7 +68,7 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
         currentDate.format('YYYY-MM-DD').toString(),
       ).toUTCString();
       const endDate = new Date(
-        currentDate.clone().utc().endOf('month').endOf('day').toISOString(),
+        currentDate.clone().endOf('month').utc().endOf('day').toISOString(),
       ).toUTCString();
 
       return { startDate, endDate };
@@ -79,7 +79,7 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
         currentDate.startOf('M').format('YYYY-MM-DD').toString(),
       ).toUTCString();
       const endDate = new Date(
-        currentDate.clone().utc().endOf('month').endOf('day').toISOString(),
+        currentDate.clone().endOf('month').utc().endOf('day').toISOString(),
       ).toUTCString();
 
       return { startDate, endDate };
