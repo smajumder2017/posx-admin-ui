@@ -44,7 +44,7 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
         currentDate
           .clone()
           .endOf('isoWeek')
-          .add(1, 'd')
+          .endOf('day')
           .format('YYYY-MM-DD')
           .toString(),
       ).toUTCString();
@@ -64,7 +64,7 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
         currentDate
           .clone()
           .endOf('isoWeek')
-          .add(1, 'd')
+          .endOf('day')
           .format('YYYY-MM-DD')
           .toString(),
       ).toUTCString();
@@ -78,7 +78,7 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
         currentDate.format('YYYY-MM-DD').toString(),
       ).toUTCString();
       const endDate = new Date(
-        currentDate.endOf('M').format('YYYY-MM-DD').toString(),
+        currentDate.endOf('M').endOf('day').format('YYYY-MM-DD').toString(),
       ).toUTCString();
 
       return { startDate, endDate };
@@ -89,7 +89,7 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
         currentDate.startOf('M').format('YYYY-MM-DD').toString(),
       ).toUTCString();
       const endDate = new Date(
-        currentDate.endOf('M').format('YYYY-MM-DD').toString(),
+        currentDate.endOf('M').endOf('day').format('YYYY-MM-DD').toString(),
       ).toUTCString();
 
       return { startDate, endDate };
