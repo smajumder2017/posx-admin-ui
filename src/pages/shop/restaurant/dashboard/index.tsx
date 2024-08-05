@@ -44,6 +44,7 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
         currentDate
           .clone()
           .add(1, 'd')
+          .subtract(1, 'second')
           .endOf('isoWeek')
           .format('YYYY-MM-DD')
           .toString(),
@@ -64,6 +65,7 @@ function createRange(range: 'current_week' | 'previous_week' | string) {
         currentDate
           .clone()
           .add(1, 'd')
+          .subtract(1, 'second')
           .endOf('isoWeek')
           .format('YYYY-MM-DD')
           .toString(),
